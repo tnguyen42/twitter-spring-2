@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "compile": "hardhat compile",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "deploy:goerli_infura": "npx hardhat run scripts/deploy.js --network goerli_infura",
+    "deploy:sepolia_infura": "npx hardhat run scripts/deploy.js --network sepolia_infura",
+    "deploy:goerli_alchemy": "npx hardhat run scripts/deploy.js --network goerli_alchemy"
   },
   "repository": {
     "type": "git",
@@ -25,5 +28,8 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "hardhat": "^2.15.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
   }
 }
