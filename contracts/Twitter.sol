@@ -10,7 +10,14 @@ contract Twitter {
     bool deleted;
   }
 
+  address payable public owner;
+
   Tweet[] public tweets;
+  mapping(address => bool) public isUserCertified;
+
+  constructor() {
+    owner = payable(msg.sender);
+  }
 
   /**
    * A modifier to prevent anyone other than the author of a tweet to execute
@@ -41,7 +48,7 @@ contract Twitter {
     uint256 count = 0;
 
     for (uint256 i = 0; i < tweets.length; i++) {
-      if (!tweets[i].deleted) {
+      if (!tweets[i].deleted && (count < 600 || isUserCertified[msg.sender])) {
         returnedTweets[count] = tweets[i];
         count++;
       }
@@ -78,6 +85,15 @@ contract Twitter {
   }
 
   /**
+   * @dev A function that allows a user to get certified on the platform
+   */
+  function certifiedSignUp() external payable {
+    require(msg.value >= 0.00051 ether, 'Not enough ether sent');
+
+    isUserCertified[msg.sender] = true;
+  }
+
+  /**
    * @dev A function that creates a new tweet.
    * @param _content The content of the tweet.
    */
@@ -91,5 +107,11 @@ contract Twitter {
         deleted: false
       })
     );
+  }
+
+  function withdraw() public {
+    require(msg.sender == owner, "You aren't the owner");
+
+    owner.transfer(address(this).balance);
   }
 }
