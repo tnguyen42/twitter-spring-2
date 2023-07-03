@@ -30,7 +30,14 @@ contract Twitter {
    * @return Tweet[] An array of all the tweets.
    */
   function getTweets() public view returns (Tweet[] memory) {
-    Tweet[] memory returnedTweets;
+    uint256 totalCount;
+    for (uint256 i = 0; i < tweets.length; i++) {
+      if (!tweets[i].deleted) {
+        totalCount++;
+      }
+    }
+
+    Tweet[] memory returnedTweets = new Tweet[](totalCount);
     uint256 count = 0;
 
     for (uint256 i = 0; i < tweets.length; i++) {
